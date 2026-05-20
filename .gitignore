@@ -1,0 +1,22 @@
+# Python
+ml/.venv/
+ml/data/
+__pycache__/
+*.pyc
+
+# Rust
+api-rust/target/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Model
+ml/models/*.pt
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
