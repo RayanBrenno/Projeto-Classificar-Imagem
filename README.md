@@ -1,11 +1,49 @@
 # Projeto Classificar Imagem
 
-Classificador de imagens ponta a ponta usando transfer learning com ResNet18.
+## Visão Geral
 
-- **Modelo** — PyTorch, ResNet18 fine-tuned no CIFAR-10
-- **API** — Rust + Axum (gateway + pré-processamento)
-- **Sidecar** — Python + FastAPI (inferência)
-- **Frontend** — React + Vite (upload + visualização do top-K)
+Aplicação fullstack de classificação de imagens ponta a ponta, construída com uma arquitetura de três camadas: frontend em React, gateway em Rust e sidecar de inferência em Python com PyTorch.
+
+O usuário faz upload de uma imagem pelo browser, e o sistema retorna a classe predita com nível de confiança e um ranking das top-K classes mais prováveis, renderizado em barras de progresso.
+
+O modelo é uma ResNet18 com fine-tuning no dataset CIFAR-10, atingindo 87.76% de acurácia de validação.
+
+| Camada | Tecnologia |
+|---|---|
+| Modelo | PyTorch, ResNet18 fine-tuned no CIFAR-10 |
+| API | Rust + Axum (gateway + pré-processamento) |
+| Sidecar | Python + FastAPI (inferência) |
+| Frontend | React + Vite (upload + visualização do top-K) |
+
+---
+
+## Objetivo
+
+O projeto foi desenvolvido como aplicação prática de conceitos de machine learning e engenharia de software, com foco em:
+
+- Aplicar transfer learning com uma arquitetura CNN estabelecida (ResNet18)
+- Construir um pipeline de inferência desacoplado (gateway Rust + sidecar Python)
+- Integrar pré-processamento de imagem em baixo nível (redimensionamento Lanczos3 no gateway)
+- Expor o resultado de forma visual e interativa no frontend
+
+---
+
+## Funcionalidades
+
+- Upload de imagem direto pelo browser (arrastar ou selecionar arquivo)
+- Predição automática da classe com percentual de confiança
+- Ranking das top-K classes mais prováveis com barras de progresso
+- Latência local típica de 50–80ms do upload até a resposta
+
+---
+
+## Classes suportadas
+
+O modelo classifica imagens nas 10 categorias do CIFAR-10:
+
+`airplane` · `automobile` · `bird` · `cat` · `deer` · `dog` · `frog` · `horse` · `ship` · `truck`
+
+> O modelo foi treinado em imagens 32×32 do CIFAR-10. Funciona melhor com imagens simples e centralizadas nessas categorias — fotos complexas ou fora dessas classes retornarão um resultado, mas com baixa confiança.
 
 ---
 
@@ -14,6 +52,8 @@ Classificador de imagens ponta a ponta usando transfer learning com ResNet18.
 | Modelo | Dataset | Params | Val acc |
 |---|---|---:|---:|
 | ResNet18 transfer learning | CIFAR-10 | 11M | **87.76%** |
+
+Estado da arte no CIFAR-10 é ~99%; 87.76% é uma baseline sólida com transfer learning simples sem ajuste de hiperparâmetros.
 
 ---
 
@@ -45,6 +85,8 @@ Latência local típica: ~50-80ms total.
 - Node 20+
 
 ### Primeira execução
+
+> **Já tem um modelo treinado?** Coloque o arquivo `.pt` em `ml/models/cifar10_resnet18.pt` antes de rodar o setup — o treino será pulado automaticamente.
 
 ```bash
 chmod +x setup.sh
